@@ -6,6 +6,7 @@ Created on Jan 29, 2010
 
 from PyQt4.QtGui import *
 #from PyQt4.QtCore import *
+from PyQt4 import QtGui
 from PyQt4 import QtCore
 import sys
 #from PyQt4 import uic
@@ -31,24 +32,28 @@ class EncodeDialog(encode_dialog_ui.Ui_EncodeDialog):
         self.message = (txt_file.split("/")[-1] + " encoded into " + 
         in_org_im.split("/")[-1] + " and written to " + in_enc_im.split("/")[-1] + ".")
 
+
+        
         print in_org_im
+        tmp = Image.open(in_org_im)
+        tmp.show()
         self.org_im = in_org_im
         print in_enc_im
         self.enc_im = in_enc_im
         
-        self.encoded_label.setText(self.message)
+        self.encoded_label.setPixmap(QtGui.QPixmap(in_enc_im))
         
         QtCore.QObject.connect(self.view_image_button, QtCore.SIGNAL("clicked()"),
                         self.on_view_image_button_press)
 
     def on_view_image_button_press(self):
         print "hello world"
-        Image.open(self.enc_im).show()
+        Image.open(self.enc_im,'r').show()
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     tmp = QMainWindow()
-    myg = EncodeDialog(tmp,'a.png','b','c.png')
+    myg = EncodeDialog(tmp,'a.png','b','C:/users/varzac/Projects/Python/Steganogra-py//src/c.png')
     app.exec_()
 
         
