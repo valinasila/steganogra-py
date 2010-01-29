@@ -23,11 +23,15 @@ from PyQt4.QtCore import *
 import sys
 import Steganography
 #Recompile UI from QT Designer
-#from PyQt4 import uic
+from PyQt4 import uic
 #tmp = open('MainWindow.py', 'w')
 #uic.compileUi('MainWindow.ui', tmp)
 #tmp.close()
+#tmp = open('encode_dialog_ui.py', 'w')
+#uic.compileUi('encode_dialog.ui', tmp)
+#tmp.close()
 import MainWindow
+import encode_dialog
 
 
 class MyGUI(MainWindow.Ui_MainWindow):
@@ -133,19 +137,21 @@ class MyGUI(MainWindow.Ui_MainWindow):
             self.encode_new_image_filename != "" and
             self.encode_txt_filename != ""):
             
-        
+            
             try:
                 im = Steganography.encode(self.encode_image_filename, self.encode_txt_filename, 
                                           self.encode_red_bits, self.encode_green_bits,
                                           self.encode_blue_bits)
                 im.save(self.encode_new_image_filename)
-                tmp.showMessage(self.encode_txt_filename.split("/")[-1] + " encoded into " +
-                                self.encode_image_filename.split("/")[-1] + " and written to " +
-                                self.encode_new_image_filename.split("/")[-1] + ".")
+#                tmp.showMessage(self.encode_txt_filename.split("/")[-1] + " encoded into " +
+#                                self.encode_image_filename.split("/")[-1] + " and written to " +
+#                                self.encode_new_image_filename.split("/")[-1] + ".")
+                encode_dialog.EncodeDialog(self.mw, self.encode_image_filename, self.encode_txt_filename, self.encode_new_image_filename)
             except Steganography.FileTooLargeException:
                 tmp.showMessage(self.encode_txt_filename.split("/")[-1] + 
                                 " is to large to be encoded into " +
                                 self.encode_image_filename.split("/")[-1])
+            
         else:
             tmp.showMessage("Please specify all filenames.")
             
