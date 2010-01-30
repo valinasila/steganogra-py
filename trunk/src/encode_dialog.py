@@ -35,14 +35,14 @@ class EncodeDialog(encode_dialog_ui.Ui_EncodeDialog):
 
         
         print in_org_im
-        tmp = Image.open(in_org_im)
-        tmp.show()
+#        tmp = Image.open(in_org_im)
+#        tmp.show()
         self.org_im = in_org_im
         print in_enc_im
         self.enc_im = in_enc_im
         
-        self.encoded_label.setPixmap(QtGui.QPixmap(in_enc_im))
-        
+#        self.encoded_label.setPixmap(QtGui.QPixmap(in_enc_im))
+        self.encoded_label.setText(self.message)       
         QtCore.QObject.connect(self.view_image_button, QtCore.SIGNAL("clicked()"),
                         self.on_view_image_button_press)
 
