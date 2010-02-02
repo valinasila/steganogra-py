@@ -41,7 +41,10 @@ class EncodeDialog(encode_dialog_ui.Ui_EncodeDialog):
         self.encoded_label.setText(self.message)       
 
     def on_view_image_button_press(self):
-        print "hello world"
+        tmp = open('test123.txt','w')
+        tmp.write('Hello World')
+        tmp.close()
+#        print "hello world"
  #       Image.open(self.enc_im,'r').show()
         
 if __name__ == '__main__':
