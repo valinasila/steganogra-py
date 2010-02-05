@@ -33,17 +33,14 @@ def Dec2Bin(n):
     binary equivalent.  Code inspired from 
     http://www.daniweb.com/code/snippet216539.html
     '''
-    return "".join([str((n>>y)&1) for y in xrange(7,-1,-1)])
+    return list(bin(n)[2:].zfill(8))
 
 def Bin2Dec(n):
     '''
     Function that takes a string of 1s and 0s and converts it back to an
     integer
     '''
-    tmp = 0
-    for i in xrange(1,len(n)+1):
-        tmp+= (pow(2,i-1))*int(n[-i])
-    return tmp
+    return int(n,2)
 
 def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
     ''' 
@@ -58,18 +55,25 @@ def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
     data = ""
     for line in data_file:
         for char in line:
-            data += Dec2Bin(ord(char))
+            data += "".join(Dec2Bin(ord(char)))
     # Termination characters
-    data+= Dec2Bin(255) + Dec2Bin(255)
+    data+= "".join(Dec2Bin(255)) + "".join(Dec2Bin(255))
     
-    new_image_data = []
     colors = ["red", "green", "blue"]
     i = 0;
     curCol = 0;
+    out_image = in_image.copy()
+    x = -1
+    y = -1
     for pixel in in_image.getdata():
         # This will hold the new array of R,G,B colors with the 
         # embedded data
         new_col_arr = []
+        
+        x = (x + 1)%out_image.size[0]
+        if x == 0:
+            y += 1
+            
         for color in pixel:
             new_col = 0
             # if we still have data to encode
@@ -85,7 +89,7 @@ def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
                     bits = blue_bits
 
                 # Encode the number of bits requested
-                tmp = list(Dec2Bin(color))
+                tmp = Dec2Bin(color)
                 for j in xrange(1,bits+1):
                     # if we still have data to encode
                     if(i < len(data)):
@@ -102,18 +106,12 @@ def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
             curCol +=1
         
         # Append the new 3 color array to our new image data
-        new_image_data.append(new_col_arr)
+        out_image.putpixel((x,y),tuple(new_col_arr))
     
     # If there wasn't enough pixels to encode all the data.
     if i != len(data):
         raise FileTooLargeException("Image to small for current settings.")
 
-    # Write our new image data to a new image
-    out_image = in_image.copy()
-    for x in xrange(out_image.size[0]):
-        for y in xrange(out_image.size[1]):
-            pos = x + out_image.size[0] * y
-            out_image.putpixel((x,y),tuple(new_image_data[pos]))
     return out_image
     
 def decode(im_dec, red_bits=1, green_bits=1, blue_bits=1):
