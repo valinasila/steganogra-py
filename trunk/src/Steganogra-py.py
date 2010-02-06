@@ -23,7 +23,7 @@ from PyQt4.QtCore import *
 import sys
 import Steganography
 #Recompile UI from QT Designer
-from PyQt4 import uic
+#from PyQt4 import uic
 #tmp = open('MainWindow.py', 'w')
 #uic.compileUi('MainWindow.ui', tmp)
 #tmp.close()
@@ -32,7 +32,7 @@ from PyQt4 import uic
 #tmp.close()
 import MainWindow
 import encode_dialog
-
+import StegThreads
 
 class MyGUI(MainWindow.Ui_MainWindow):
     
@@ -56,6 +56,10 @@ class MyGUI(MainWindow.Ui_MainWindow):
         self.decode_image_filename = ""
         self.decode_txt_filename = ""
         
+        self.encode_thread = StegThreads.EncodeWorker()
+        self.decode_thread = StegThreads.DecodeWorker()
+        
+        
         # Encode events 
         QObject.connect(self.encode_file_browse_button, SIGNAL("clicked()"),
                         self.on_encode_file_browse_button_press)
@@ -77,6 +81,9 @@ class MyGUI(MainWindow.Ui_MainWindow):
                         self.on_encode_blue_bits_change)
         QObject.connect(self.encode_button, SIGNAL("clicked()"),
                         self.on_encode_button_press)
+        QObject.connect(self.encode_thread, SIGNAL("terminated()"), self.unknown_error)
+        QObject.connect(self.encode_thread, SIGNAL("complete()"), self.encode_success)
+        QObject.connect(self.encode_thread, SIGNAL("error()"), self.encode_error)
 
         # Decode events
         QObject.connect(self.decode_file_browse_button, SIGNAL("clicked()"),
@@ -95,6 +102,8 @@ class MyGUI(MainWindow.Ui_MainWindow):
                         self.on_decode_blue_bits_change)
         QObject.connect(self.decode_button, SIGNAL("clicked()"),
                         self.on_decode_button_press)
+        QObject.connect(self.decode_thread, SIGNAL("terminated()"), self.unknown_error)
+        QObject.connect(self.decode_thread, SIGNAL("complete()"), self.decode_success)
         
         
     # Encode event handlers
@@ -132,28 +141,24 @@ class MyGUI(MainWindow.Ui_MainWindow):
         self.encode_txt_filename = str(myStr)
         
     def on_encode_button_press(self):
-        tmp = QErrorMessage(self.mw)
         if (self.encode_image_filename != "" and 
             self.encode_new_image_filename != "" and
             self.encode_txt_filename != ""):
-            
-            
-            try:
-                im = Steganography.encode(self.encode_image_filename, self.encode_txt_filename, 
-                                          self.encode_red_bits, self.encode_green_bits,
-                                          self.encode_blue_bits)
-                im.save(self.encode_new_image_filename)
-#                tmp.showMessage(self.encode_txt_filename.split("/")[-1] + " encoded into " +
-#                                self.encode_image_filename.split("/")[-1] + " and written to " +
-#                                self.encode_new_image_filename.split("/")[-1] + ".")
-                encode_dialog.EncodeDialog(self.mw, self.encode_image_filename, self.encode_txt_filename, self.encode_new_image_filename)
-            except Steganography.FileTooLargeException:
-                tmp.showMessage(self.encode_txt_filename.split("/")[-1] + 
-                                " is to large to be encoded into " +
-                                self.encode_image_filename.split("/")[-1])
-            
+
+            self.encode_thread.setup(self.encode_image_filename, self.encode_txt_filename, 
+                                     self.encode_new_image_filename, self.encode_red_bits, 
+                                     self.encode_green_bits, self.encode_blue_bits)
         else:
+            tmp = QErrorMessage(self.mw)
             tmp.showMessage("Please specify all filenames.")
+            
+    def encode_success(self):
+        encode_dialog.EncodeDialog(self.mw, self.encode_image_filename, self.encode_txt_filename, self.encode_new_image_filename)
+        
+    def encode_error(self, msg =""):
+        tmp = QErrorMessage(self.mw)
+        tmp.showMessage("The image is not large enough to contain the specified file" +
+                            " with the current settings")
             
 
     # Decode event handlers
@@ -183,16 +188,23 @@ class MyGUI(MainWindow.Ui_MainWindow):
         self.decode_image_filename = str(myStr)
         
     def on_decode_button_press(self):
-        tmp = QErrorMessage(self.mw)
         if(self.decode_image_filename != "" and self.decode_txt_filename != ""):
-            data = Steganography.decode(self.decode_image_filename, 
-                                        self.decode_red_bits, self.decode_green_bits,
-                                        self.decode_blue_bits)
-            Steganography.save_file(data, self.decode_txt_filename);
-            tmp.showMessage(self.decode_image_filename.split("/")[-1] + " decoded and written to " +
-                            self.decode_txt_filename.split("/")[-1] + ".")
+            self.decode_thread.setup(self.decode_image_filename, self.decode_txt_filename,
+                                      self.decode_red_bits, self.decode_green_bits,
+                                      self.decode_blue_bits)
         else:
+            tmp = QErrorMessage(self.mw)
             tmp.showMessage("Please specify all filenames.")
+
+    def decode_success(self):
+        tmp = QErrorMessage(self.mw)
+        tmp.showMessage(self.decode_image_filename.split("/")[-1] + " decoded and written to " +
+                        self.decode_txt_filename.split("/")[-1] + ".")
+
+            
+    def unknown_error(self):
+        tmp = QErrorMessage(self.mw)
+        tmp.showMessage("An unknown error has occurred")
 
 
 if __name__ == '__main__':
