@@ -33,6 +33,8 @@ import Steganography
 import MainWindow
 import encode_dialog
 import StegThreads
+import time
+import progress_dialog
 
 class MyGUI(MainWindow.Ui_MainWindow):
     
@@ -59,6 +61,10 @@ class MyGUI(MainWindow.Ui_MainWindow):
         self.encode_thread = StegThreads.EncodeWorker()
         self.decode_thread = StegThreads.DecodeWorker()
         
+        self.prog_dialog = progress_dialog.ProgressDialog(self.mw)
+        self.progress_thread = StegThreads.ProgressWorker(self.prog_dialog)
+         
+        
         
         # Encode events 
         QObject.connect(self.encode_file_browse_button, SIGNAL("clicked()"),
@@ -79,11 +85,15 @@ class MyGUI(MainWindow.Ui_MainWindow):
                         self.on_encode_green_bits_change)
         QObject.connect(self.encode_blue_bits_combo, SIGNAL("currentIndexChanged(int)"),
                         self.on_encode_blue_bits_change)
-        QObject.connect(self.encode_button, SIGNAL("clicked()"),
-                        self.on_encode_button_press)
+#        QObject.connect(self.encode_button, SIGNAL("clicked()"),
+#                        self.on_encode_button_press)
+        self.encode_button.clicked.connect(self.on_encode_button_press)
+
         QObject.connect(self.encode_thread, SIGNAL("terminated()"), self.unknown_error)
         QObject.connect(self.encode_thread, SIGNAL("complete()"), self.encode_success)
         QObject.connect(self.encode_thread, SIGNAL("error()"), self.encode_error)
+        QObject.connect(self.progress_thread, SIGNAL("complete()"), self.progress_complete)
+        
 
         # Decode events
         QObject.connect(self.decode_file_browse_button, SIGNAL("clicked()"),
@@ -144,6 +154,7 @@ class MyGUI(MainWindow.Ui_MainWindow):
         if (self.encode_image_filename != "" and 
             self.encode_new_image_filename != "" and
             self.encode_txt_filename != ""):
+            self.run_progress()
 
             self.encode_thread.setup(self.encode_image_filename, self.encode_txt_filename, 
                                      self.encode_new_image_filename, self.encode_red_bits, 
@@ -154,12 +165,22 @@ class MyGUI(MainWindow.Ui_MainWindow):
             
     def encode_success(self):
         encode_dialog.EncodeDialog(self.mw, self.encode_image_filename, self.encode_txt_filename, self.encode_new_image_filename)
+        self.progress_complete()
         
     def encode_error(self, msg =""):
         tmp = QErrorMessage(self.mw)
         tmp.showMessage("The image is not large enough to contain the specified file" +
                             " with the current settings")
             
+    def run_progress(self):
+        self.prog_dialog.show()
+        self.progress_thread.start()
+    
+    def progress_complete(self):
+        self.progress_thread.end()
+        self.progress_thread.__del__()
+        self.prog_dialog.hide()
+        self.progress_thread = StegThreads.ProgressWorker(self.prog_dialog)
 
     # Decode event handlers
     def on_decode_file_browse_button_press(self):

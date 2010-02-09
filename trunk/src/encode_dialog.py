@@ -7,7 +7,6 @@ Created on Jan 29, 2010
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 #from PyQt4 import QtGui
-from PyQt4 import QtCore
 import sys
 #from PyQt4 import uic
 #tmp = open('encode_dialog_ui.py', 'w')
