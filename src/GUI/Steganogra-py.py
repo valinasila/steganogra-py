@@ -21,7 +21,6 @@ along with Steganogra-py.  If not, see <http://www.gnu.org/licenses/>.
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
-import Steganography
 #Recompile UI from QT Designer
 #from PyQt4 import uic
 #tmp = open('MainWindow.py', 'w')
@@ -32,7 +31,8 @@ import Steganography
 #tmp.close()
 import MainWindow
 import encode_dialog
-import StegThreads
+from Logic import StegThreads
+from Logic import Steganography
 import time
 import progress_dialog
 
