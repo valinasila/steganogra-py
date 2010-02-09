@@ -7,6 +7,7 @@ Created on Feb 6, 2010
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import Steganography
+import time
 
 class EncodeWorker(QThread):
     def __init__(self, parent = None):
@@ -56,3 +57,22 @@ class DecodeWorker(QThread):
                                     self.blue_bits)
         Steganography.save_file(data, self.txt_filename);
         self.emit(SIGNAL("complete()"))
+        
+class ProgressWorker(QThread):
+    
+    def __init__(self, progDia, parent = None):
+        QThread.__init__(self, parent)
+        self.exiting = False
+        self.progress_dialog = progDia
+        
+    def run(self):
+        while(not self.exiting):
+            self.progress_dialog.increment()
+            time.sleep(.01)
+            
+    def end(self):
+        self.exiting = True
+        
+    def __del__(self):
+        self.exiting = True
+        self.wait()
