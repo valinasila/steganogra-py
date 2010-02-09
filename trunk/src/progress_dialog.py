@@ -3,10 +3,10 @@ Created on Feb 8, 2010
 
 @author: Zachary Varberg
 '''
-from PyQt4 import uic
-tmp = open('UI_progress_dialog.py', 'w')
-uic.compileUi('progress_dialog.ui', tmp)
-tmp.close()
+#from PyQt4 import uic
+#tmp = open('UI_progress_dialog.py', 'w')
+#uic.compileUi('progress_dialog.ui', tmp)
+#tmp.close()
 import UI_progress_dialog
 from PyQt4.QtGui import *
 import sys
