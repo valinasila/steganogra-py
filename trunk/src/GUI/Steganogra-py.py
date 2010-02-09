@@ -213,11 +213,13 @@ class MyGUI(MainWindow.Ui_MainWindow):
             self.decode_thread.setup(self.decode_image_filename, self.decode_txt_filename,
                                       self.decode_red_bits, self.decode_green_bits,
                                       self.decode_blue_bits)
+            self.run_progress()
         else:
             tmp = QErrorMessage(self.mw)
             tmp.showMessage("Please specify all filenames.")
 
     def decode_success(self):
+        self.progress_complete()
         tmp = QErrorMessage(self.mw)
         tmp.showMessage(self.decode_image_filename.split("/")[-1] + " decoded and written to " +
                         self.decode_txt_filename.split("/")[-1] + ".")
