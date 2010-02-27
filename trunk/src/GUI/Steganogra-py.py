@@ -18,10 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Steganogra-py.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+
+import sys
+import time
+
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-import sys
-#Recompile UI from QT Designer
+##Recompile UI from QT Designer
 #from PyQt4 import uic
 #tmp = open('MainWindow.py', 'w')
 #uic.compileUi('MainWindow.ui', tmp)
@@ -29,14 +32,17 @@ import sys
 #tmp = open('encode_dialog_ui.py', 'w')
 #uic.compileUi('encode_dialog.ui', tmp)
 #tmp.close()
-import MainWindow
-import encode_dialog
+
+from GUI import MainWindow
+#from GUI import encode_dialog
 from Logic import StegThreads
 from Logic import Steganography
-import time
-import progress_dialog
+from GUI import progress_dialog
 
 class MyGUI(MainWindow.Ui_MainWindow):
+    """
+    This is the main GUI class that will run the Steganogra-py app.
+    """
     
     def __init__(self):
         self.mw = QMainWindow()
@@ -164,7 +170,11 @@ class MyGUI(MainWindow.Ui_MainWindow):
             tmp.showMessage("Please specify all filenames.")
             
     def encode_success(self):
-        encode_dialog.EncodeDialog(self.mw, self.encode_image_filename, self.encode_txt_filename, self.encode_new_image_filename)
+        #encode_dialog.EncodeDialog(self.mw, self.encode_image_filename, self.encode_txt_filename, self.encode_new_image_filename)
+        tmp = QErrorMessage(self.mw)
+        tmp.showMessage(self.encode_txt_filename.split("/")[-1] + " encoded into " + 
+                        self.encode_image_filename.split("/")[-1] + " and written to " + 
+                        self.encode_new_image_filename.split("/")[-1] + ".")
         self.progress_complete()
         
     def encode_error(self, msg =""):
@@ -224,7 +234,6 @@ class MyGUI(MainWindow.Ui_MainWindow):
         tmp.showMessage(self.decode_image_filename.split("/")[-1] + " decoded and written to " +
                         self.decode_txt_filename.split("/")[-1] + ".")
 
-            
     def unknown_error(self):
         tmp = QErrorMessage(self.mw)
         tmp.showMessage("An unknown error has occurred")
