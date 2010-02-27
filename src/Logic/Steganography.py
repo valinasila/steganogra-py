@@ -30,8 +30,7 @@ class FileTooLargeException(Exception):
 def Dec2Bin(n):
     '''
     Function to convert an integer to a string of 1s and 0s that is the
-    binary equivalent.  Code inspired from 
-    http://www.daniweb.com/code/snippet216539.html
+    binary equivalent.
     '''
     return list(bin(n)[2:].zfill(8))
 
@@ -115,6 +114,14 @@ def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
     return out_image
     
 def decode(im_dec, red_bits=1, green_bits=1, blue_bits=1):
+    '''
+    Inverse of decode.  im_dec is the image file with the encoded data.
+    red_bits, green_bits, and blue_bits are the number of each color bit
+    that was encoded in the image.  It is important that these match the 
+    values specified when encode was called, otherwise the output will be 
+    garbage.  This method will return a string that is the character data
+    encoded in the file.
+    '''
     in_image = Image.open(im_dec)
 
     # Number of consecutive ones to track if we've found the termination
