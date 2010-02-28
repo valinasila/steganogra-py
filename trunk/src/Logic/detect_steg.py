@@ -3,20 +3,15 @@ Created on Feb 27, 2010
 
 @author: Zachary Varberg
 '''
-
-from PIL import Image
-from Logic import Steganography as Steg
 import re
 import math
 
+from PIL import Image
+from Logic import Steganography as Steg
+from scipy import stats
+
 TWL = open('TWL06.txt')
 TWL_words = TWL.read().split()
-
-def factorial(n):
-    if n == 0:
-        return 1
-    else:
-        return n * factorial(n-1)
 
 def dictionary_steg_detect(image):
     my_image = Image.open(image)
@@ -49,7 +44,7 @@ def dictionary_steg_detect(image):
                 for char in back_char_data:
                     if re.match('[a-zA-Z0-9 \n\r=+-]',char):
                         char_count += 1
-                if binomial_probability(len(back_char_data),char_count) < .00001:
+                if stats.binom_test(char_count, len(back_char_data),67.0/256) < .00001:
                     word_list = ''.join(back_char_data).upper().split()
                     if True in [x in TWL_words for x in word_list]:
                         probable_encodings['backward'].append(tuple(bit_list))
@@ -57,17 +52,11 @@ def dictionary_steg_detect(image):
                 for char in forw_char_data:
                     if re.match('[a-zA-Z0-9 \n\r=+-]',char):
                         char_count += 1
-                if binomial_probability(len(forw_char_data),char_count) < .00001:
+                if stats.binom_test(char_count, len(forw_char_data),67.0/256) < .00001:
                     word_list = ''.join(forw_char_data).upper().split()
                     if True in [x in TWL_words for x in word_list]:
                         probable_encodings['forward'].append(tuple(bit_list))
     return probable_encodings
-                    
-                
-def binomial_probability(n,k):    
-    bin_coeff = (factorial(n)*1.0)/(factorial(k)*factorial(n-k))
-    prob = bin_coeff * pow((67.0/256),k) * pow((1 - (67.0/256)),(n-k))
-    return prob
                     
 if __name__ == "__main__":
     print dictionary_steg_detect("C:\Documents And Settings\Zachary Varberg\Projects"+
