@@ -1,19 +1,17 @@
-#summary README
-
 =README=
 
 This is a readme for Steganogra-py a free steganography tool written in
 python and created by Zachary Varberg, 2010.
 
-==EXECUTION==:
+==EXECUTION==
 
-	===RUN===:
+	===RUN===
 	Simply run Steganogra-py.exe to start the program.
 
 	There are two tabs, encode and decode.  These are used for their obvious 
 	purposes.  
 
-	===ENCODING===:
+	===ENCODING===
 
 	On the encode page you will find options for which file you would
 	like to encode (currently only .txt files are supported), what image you would
@@ -24,7 +22,7 @@ python and created by Zachary Varberg, 2010.
 	These start with the least significant bit and move towards more significant bits.
 	Once everything is set press the encode button, and it will do the rest.
 
-	===DECODING===:
+	===DECODING===
 
 	The decoding precess is very similar to encoding.  You choose image file with the 
 	encoded data, and the file where you would like to save the output.  You choose the
@@ -59,11 +57,3 @@ you have any requests for future features, please don't hesitate to let me know 
 Zach.Varberg (at) Gmail (dot) com!
 
 The source code is available at http://code.google.com/p/steganogra-py/downloads/list
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
