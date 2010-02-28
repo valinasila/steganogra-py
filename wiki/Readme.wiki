@@ -29,7 +29,3 @@ This is a readme for Steganogra-py a free steganography tool written inpython an
 And that's it!  This is hopefully a very simple to use steganography app.  While a number of improvements were made for v1.1 they were mostly cosmetic and performance issues.  The feature set was not significantly expanded.  BUT, development continues and future features include, suggested encoding styles, random encoding, steganography detection (this one is rather difficult so it may or may not happen), as well as support for other file-types. If you have any requests for future features, please don't hesitate to let me know at Zach.Varberg (at) Gmail (dot) com!
 
 The source code is available at http://code.google.com/p/steganogra-py/downloads/list
-
-com!
-
-The source code is available at http://code.google.com/p/steganogra-py/downloads/list
