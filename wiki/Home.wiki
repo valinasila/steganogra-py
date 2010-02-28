@@ -1,5 +1,5 @@
 Steganogra-py is a simple open-source steganography app written in python.  The source code and windows installer can be downloaded from the downloads page.  Currently it is only version 1.0 and is not very full featured.  However, development is continuing and hopefully more features are forthcoming.  I fully expect that no one is going to read this, but if you are feel free to add an "issue" of a requested feature.  Hopefully this wiki page will grow with the application.
 
-For more detailed look at how to run the application please visit the README page. However, the readme is for v1.1 which has not yet been released.  Hopefully it will be released in the next week or so.
+For more detailed look at how to run the application please visit the [http://code.google.com/p/steganogra-py/wiki/Readme README] page. However, the readme is for v1.1 which has not yet been released.  Hopefully it will be released in the next week or so.
 
 Thanks for reading!
