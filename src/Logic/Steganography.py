@@ -17,7 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Steganogra-py.  If not, see <http://www.gnu.org/licenses/>.
 '''
-import Image
+from PIL import Image
 
 class FileTooLargeException(Exception):
     '''
