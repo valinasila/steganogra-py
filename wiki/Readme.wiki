@@ -28,3 +28,13 @@ And that's it!  This is hopefully a very simple to use steganography app.  While
 The source code is available at http://code.google.com/p/steganogra-py/downloads/list
 
 Stegosaurus icon provided by http://www.fasticon.com 
+
+==Licensing Information==
+Copyright (C) 2010 Zachary Varberg
+author: Zachary Varberg
+
+Steganogra-py is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Steganogra-py is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a [:copy] of the GNU General Public License along with Steganogra-py.  If not, see <http://www.gnu.org/licenses/>.
