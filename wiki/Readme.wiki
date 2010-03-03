@@ -37,4 +37,4 @@ Steganogra-py is free software: you can redistribute it and/or modify it under t
 
 Steganogra-py is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a [:copy] of the GNU General Public License along with Steganogra-py.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a [http://code.google.com/p/steganogra-py/wiki/COPYING:copy] of the GNU General Public License along with Steganogra-py.  If not, see <http://www.gnu.org/licenses/>.
