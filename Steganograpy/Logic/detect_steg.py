@@ -30,16 +30,16 @@ def dictionary_steg_detect(image):
                 for x in xrange(int(math.ceil((240.0/sum(bit_list))))):
                     pixel = pixels[x,0]
                     for i in xrange(3):
-                        binnum = Steg.Dec2Bin(pixel[i])
+                        binnum = Steg.dec_2_bin(pixel[i])
                         data = binnum[-bit_list[i]:]
                         forw_char_byte.extend(data)
                         data.reverse()
                         back_char_byte.extend(data)
                         if len(back_char_byte)>=8:
-                            back_char_data.append(chr(Steg.Bin2Dec(''.join(back_char_byte[:8]))))
+                            back_char_data.append(chr(Steg.bin_2_dec(''.join(back_char_byte[:8]))))
                             back_char_byte = back_char_byte[8:]
                         if len(forw_char_byte)>=8:
-                            forw_char_data.append(chr(Steg.Bin2Dec(''.join(forw_char_byte[:8]))))
+                            forw_char_data.append(chr(Steg.bin_2_dec(''.join(forw_char_byte[:8]))))
                             forw_char_byte = forw_char_byte[8:]
                 for char in back_char_data:
                     if re.match('[a-zA-Z0-9 \n\r=+-]',char):

@@ -27,14 +27,14 @@ class FileTooLargeException(Exception):
     pass
 
 
-def Dec2Bin(n):
+def dec_2_bin(n):
     '''
     Function to convert an integer to a string of 1s and 0s that is the
     binary equivalent.
     '''
     return list(bin(n)[2:].zfill(8))
 
-def Bin2Dec(n):
+def bin_2_dec(n):
     '''
     Function that takes a string of 1s and 0s and converts it back to an
     integer
@@ -54,11 +54,11 @@ def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
     data = ""
     for line in data_file:
         for char in line:
-            data += "".join(Dec2Bin(ord(char)))
+            data += "".join(dec_2_bin(ord(char)))
     # Termination characters
-    data+= "".join(Dec2Bin(255)) + "".join(Dec2Bin(255))
+    data+= "".join(dec_2_bin(255)) + "".join(dec_2_bin(255))
     
-    colors = ["red", "green", "blue"]
+    color_bits = [red_bits, green_bits, blue_bits]
     i = 0;
     curCol = 0;
     out_image = in_image.copy()
@@ -79,24 +79,18 @@ def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
             if(i < len(data)):
                 
                 # Number of bits to encode for this color
-                bits = 1
-                if (colors[curCol%3]=="red"):
-                    bits = red_bits
-                elif (colors[curCol%3]=="green"):
-                    bits = green_bits
-                elif (colors[curCol%3]=="blue"):
-                    bits = blue_bits
+                bits = color_bits[curCol%3]
 
                 # Encode the number of bits requested
-                tmp = Dec2Bin(color)
-                for j in xrange(1,bits+1):
-                    # if we still have data to encode
-                    if(i < len(data)):
-                        tmp[-j]=data[i]
-                        i+=1
+                tmp_color = dec_2_bin(color)
+                
+                tmp = list(data[i:i+bits])
+                tmp.reverse()
+                tmp_color[-bits:]=tmp
+                i+=bits
                 
                 #Pull out a new int value for the encoded color
-                new_col = Bin2Dec("".join(tmp))
+                new_col = bin_2_dec("".join(tmp_color))
             else:
                 new_col = color
             
@@ -132,34 +126,28 @@ def decode(im_dec, red_bits=1, green_bits=1, blue_bits=1):
     data = []
     
     tmp_list = []
-    colors = ["red", "green", "blue"]
+    color_bits = [red_bits, green_bits, blue_bits]
     try:
         for pixel in in_image.getdata():
             i = 0
             for color in pixel:
-                tmp = list(Dec2Bin(color))
+                tmp_color = list(dec_2_bin(color))
                 
-                bits = 1
-                if(colors[i%3]=="red"):
-                    bits = red_bits
-                if(colors[i%3]=="green"):
-                    bits = green_bits
-                if(colors[i%3]=="blue"):
-                    bits = blue_bits
+                bits = color_bits[i%3]
 
                 # Pull out the specified number of bits based on the color
-                for j in xrange(1,bits+1):
-                    tmp_list.append(tmp[-j])
-                    if tmp[-j] == '1':
-                        num_ones += 1
-                    else:
-                        num_ones = 0
-                    # If we have pulled out 1 byte of data
-                    if len(tmp_list) == 8:
-                        data.append(tmp_list)
-                        tmp_list = []
-                    # Two 255 characters is a termination sequence
-                    if num_ones == 16:
+                tmp = tmp_color[-bits:]
+                tmp.reverse()
+                tmp_list.extend(tmp)
+                
+                # If we have a full bit or more add the bit to the data
+                if len(tmp_list)>=8:
+                    data.append(tmp_list)
+                    tmp_list = tmp_list[8:]
+                
+                # If we've had 16 ones in a row quit looking
+                if len(data)>=2 and sum((int(x) for x in data[-1]))==8:
+                    if sum((int(x) for x in data[-2]))==8:
                         raise StopIteration
                 i += 1
                 
@@ -169,9 +157,9 @@ def decode(im_dec, red_bits=1, green_bits=1, blue_bits=1):
     
     chars = ""
     for char in data[:-1]:
-        tmp = chr(Bin2Dec("".join(char)))
-        if(ord(tmp)!=255):
-            chars+=tmp
+        tmp_color = chr(bin_2_dec("".join(char)))
+        if(ord(tmp_color)!=255):
+            chars+=tmp_color
         
     return chars
 

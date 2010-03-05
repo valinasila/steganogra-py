@@ -160,7 +160,7 @@ class MyGUI(MainWindow.Ui_MainWindow):
         if (self.encode_image_filename != "" and 
             self.encode_new_image_filename != "" and
             self.encode_txt_filename != ""):
-            self.run_progress()
+            #self.run_progress()
 
             self.encode_thread.setup(self.encode_image_filename, self.encode_txt_filename, 
                                      self.encode_new_image_filename, self.encode_red_bits, 
@@ -223,7 +223,7 @@ class MyGUI(MainWindow.Ui_MainWindow):
             self.decode_thread.setup(self.decode_image_filename, self.decode_txt_filename,
                                       self.decode_red_bits, self.decode_green_bits,
                                       self.decode_blue_bits)
-            self.run_progress()
+#            self.run_progress()
         else:
             tmp = QErrorMessage(self.mw)
             tmp.showMessage("Please specify all filenames.")
