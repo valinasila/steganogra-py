@@ -6,7 +6,7 @@ Created on Feb 27, 2010
 import re
 import math
 
-from PIL import Image
+from PIL import Image, ImageOps
 from Logic import Steganography as Steg
 from scipy import stats
 
@@ -46,7 +46,7 @@ def dictionary_steg_detect(image):
                         char_count += 1
                 if stats.binom_test(char_count, len(back_char_data),67.0/256) < .00001:
                     word_list = ''.join(back_char_data).upper().split()
-                    if True in [x in TWL_words for x in word_list]:
+                    if any(x in TWL_words for x in word_list):
                         probable_encodings['backward'].append(tuple(bit_list))
                 char_count = 0
                 for char in forw_char_data:
@@ -54,10 +54,20 @@ def dictionary_steg_detect(image):
                         char_count += 1
                 if stats.binom_test(char_count, len(forw_char_data),67.0/256) < .00001:
                     word_list = ''.join(forw_char_data).upper().split()
-                    if True in [x in TWL_words for x in word_list]:
+                    if any(x in TWL_words for x in word_list):
                         probable_encodings['forward'].append(tuple(bit_list))
     return probable_encodings
+
+def noise_steg_detect(image):
+    orig_image = Image.open(image)
+    equal_image = Image.open(image)
+    
+    equal_image = ImageOps.grayscale(equal_image)
+    equal_image = ImageOps.equalize(equal_image)
+
+    orig_image.show()
+    equal_image.show()
                     
 if __name__ == "__main__":
-    print dictionary_steg_detect("C:\Documents And Settings\Zachary Varberg\Projects"+
-                           "\Python\Steganogra-py\src\Resources\\asdf1.png")
+    print noise_steg_detect("C:\Documents And Settings\Zachary Varberg\Projects"+
+                           "\Python\Steganogra-py\Steganograpy\Resources\\asdf1.png")
