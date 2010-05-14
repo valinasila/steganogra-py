@@ -37,8 +37,8 @@ from PyQt4.QtCore import *
 
 from GUI import MainWindow
 #from GUI import encode_dialog
-from Logic import StegThreads
-from Logic import Steganography
+from Logic import stegthreads
+from Logic import steganography
 from GUI import progress_dialog
 
 class MyGUI(MainWindow.Ui_MainWindow):
@@ -66,11 +66,11 @@ class MyGUI(MainWindow.Ui_MainWindow):
         self.decode_image_filename = ""
         self.decode_txt_filename = ""
         
-        self.encode_thread = StegThreads.EncodeWorker()
-        self.decode_thread = StegThreads.DecodeWorker()
+        self.encode_thread = stegthreads.EncodeWorker()
+        self.decode_thread = stegthreads.DecodeWorker()
         
         self.prog_dialog = progress_dialog.ProgressDialog(self.mw)
-        self.progress_thread = StegThreads.ProgressWorker(self.prog_dialog)
+        self.progress_thread = stegthreads.ProgressWorker(self.prog_dialog)
          
         
         
@@ -164,9 +164,10 @@ class MyGUI(MainWindow.Ui_MainWindow):
             self.encode_txt_filename != ""):
             #self.run_progress()
 
+            bits = [self.encode_red_bits, self.encode_green_bits, self.encode_blue_bits]
             self.encode_thread.setup(self.encode_image_filename, self.encode_txt_filename, 
-                                     self.encode_new_image_filename, self.encode_red_bits, 
-                                     self.encode_green_bits, self.encode_blue_bits)
+                                     self.encode_new_image_filename, [self.encode_red_bits, 
+                                     self.encode_green_bits, self.encode_blue_bits])
         else:
             tmp = QErrorMessage(self.mw)
             tmp.showMessage("Please specify all filenames.")
@@ -192,7 +193,7 @@ class MyGUI(MainWindow.Ui_MainWindow):
         self.progress_thread.end()
         self.progress_thread.__del__()
         self.prog_dialog.hide()
-        self.progress_thread = StegThreads.ProgressWorker(self.prog_dialog)
+        self.progress_thread = stegthreads.ProgressWorker(self.prog_dialog)
 
     # Decode event handlers
     def on_decode_file_browse_button_press(self):
@@ -223,8 +224,8 @@ class MyGUI(MainWindow.Ui_MainWindow):
     def on_decode_button_press(self):
         if(self.decode_image_filename != "" and self.decode_txt_filename != ""):
             self.decode_thread.setup(self.decode_image_filename, self.decode_txt_filename,
-                                      self.decode_red_bits, self.decode_green_bits,
-                                      self.decode_blue_bits)
+                                      [self.decode_red_bits, self.decode_green_bits,
+                                      self.decode_blue_bits])
 #            self.run_progress()
         else:
             tmp = QErrorMessage(self.mw)

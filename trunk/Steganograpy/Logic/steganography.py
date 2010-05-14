@@ -41,13 +41,13 @@ def bin_2_dec(n):
     '''
     return int(n,2)
 
-def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
+def encode(im_file, en_file, color_bits=[1,1,1], forward=True):
     ''' 
     im_file is a string that is the file name of the image to 
     encode the data into.  The data comes from en_file.  Currently
-    only character data is supported.  The red, green, and blue bits
-    variables determine how many bits of each color to encode the data
-    into.
+    only character data is supported.  The bits list is how many bits 
+    of each color to encode the data into.  In the form 
+    [red_bits, green_bits, blue_bits]
     '''
     in_image = Image.open(im_file,'r')
     data_file = open(en_file,'rb')
@@ -58,12 +58,9 @@ def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
     # Termination characters
     data+= "".join(dec_2_bin(255)) + "".join(dec_2_bin(255))
     
-    color_bits = [red_bits, green_bits, blue_bits]
-    i = 0;
-    curCol = 0;
+    curCol = i = 0;
     out_image = in_image.copy()
-    x = -1
-    y = -1
+    x = y = -1
     for pixel in in_image.getdata():
         # This will hold the new array of R,G,B colors with the 
         # embedded data
@@ -84,9 +81,17 @@ def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
                 # Encode the number of bits requested
                 tmp_color = dec_2_bin(color)
                 
-                tmp = list(data[i:i+bits])
-                tmp.reverse()
-                tmp_color[-bits:]=tmp
+                # get the next bits (number) bits from data, reverse (may change) them and
+                # assign them to the last bits (number) bits of the current color.
+                if i+bits > len(data):
+                    diff = i+bits - len(data)
+                    data += ('1'*diff)
+                
+                if forward:
+                    tmp_color[-bits:] = data[i:i+bits]
+                else:
+                    tmp_color[-bits:] = reversed(data[i:i+bits])
+                
                 i+=bits
                 
                 #Pull out a new int value for the encoded color
@@ -103,30 +108,27 @@ def encode(im_file, en_file, red_bits=1, green_bits=1, blue_bits=1):
     
     # If there wasn't enough pixels to encode all the data.
     if i != len(data):
+        print i, len(data)
         raise FileTooLargeException("Image to small for current settings.")
 
     return out_image
     
-def decode(im_dec, red_bits=1, green_bits=1, blue_bits=1):
+def decode(im_dec, color_bits=[1,1,1], forward=True):
     '''
     Inverse of decode.  im_dec is the image file with the encoded data.
-    red_bits, green_bits, and blue_bits are the number of each color bit
-    that was encoded in the image.  It is important that these match the 
-    values specified when encode was called, otherwise the output will be 
-    garbage.  This method will return a string that is the character data
-    encoded in the file.
+    The bits list are the number of each color bit hat was encoded in the 
+    image in the form [red_bits, green_bits, blue_bits].  It is important 
+    that these match the values specified when encode was called, otherwise
+    the output will be garbage.  This method will return a string that is 
+    the character data encoded in the file.
     '''
     in_image = Image.open(im_dec)
 
-    # Number of consecutive ones to track if we've found the termination
-    # characters
-    num_ones = 0
-    
     # The data pulled out
     data = []
     
+    # A list to build the individual bits in
     tmp_list = []
-    color_bits = [red_bits, green_bits, blue_bits]
     try:
         for pixel in in_image.getdata():
             i = 0
@@ -136,32 +138,26 @@ def decode(im_dec, red_bits=1, green_bits=1, blue_bits=1):
                 bits = color_bits[i%3]
 
                 # Pull out the specified number of bits based on the color
-                tmp = tmp_color[-bits:]
-                tmp.reverse()
-                tmp_list.extend(tmp)
-                
+                if forward:
+                    tmp_list.extend(tmp_color[-bits:])
+                else:
+                    tmp_list.extend(reversed(tmp_color[-bits:]))
+
                 # If we have a full bit or more add the bit to the data
                 if len(tmp_list)>=8:
-                    data.append(tmp_list)
+                    data.append(chr(bin_2_dec(''.join(tmp_list[:8]))))
                     tmp_list = tmp_list[8:]
                 
                 # If we've had 16 ones in a row quit looking
-                if len(data)>=2 and sum((int(x) for x in data[-1]))==8:
-                    if sum((int(x) for x in data[-2]))==8:
+                if len(data) >= 2 and ord(data[-1]) == 255:
+                    if ord(data[-2]) == 255:
                         raise StopIteration
                 i += 1
                 
     except StopIteration:
         pass
     
-    
-    chars = ""
-    for char in data[:-1]:
-        tmp_color = chr(bin_2_dec("".join(char)))
-        if(ord(tmp_color)!=255):
-            chars+=tmp_color
-        
-    return chars
+    return ''.join(data[:-2])
 
 def save_file(data, file_name):
     '''
@@ -173,7 +169,41 @@ def save_file(data, file_name):
     out_file.close()
 
 if __name__ == '__main__':
-    pass
-#    encode('flower.png','Macbeth.txt',0,1,6).save('newOut.png')
-#    save_file(decode('newOut.png',0,1,6),'newOut1.txt')
+    print "TESING ENCODE FORWARD"
+    encode('..\Resources\\flower.png', '..\Resources\Macbeth.txt',[2,2,3]).save('..\Resources\\asdf1.png')
+    import hashlib
+    m = hashlib.md5()
+    m.update(''.join(open('..\Resources\\asdf1.png','rb').readlines()))
+    assert(m.digest() == '\xc6E\xfd\x98\x0012\r\x8a\xf2\x98\xd1\x93\xd2\x16\xed')
+    print "PASSED ENCODE FORWARD TEST"
+    
+    print "TESTING DECODE FORWARD"
+    save_file(decode('..\Resources\\asdf1.png',[2,2,3]),'..\Resources\\asdf1.txt')
+    m = hashlib.md5()
+    m.update(''.join((open('..\Resources\\asdf1.txt','r').readlines())))
+    decoded = m.digest()
+    m = hashlib.md5()
+    m.update(''.join((open('..\Resources\Macbeth.txt','r').readlines())))
+    from_text = m.digest()
+    assert(decoded == from_text)
+    print "PASSED DECODE FORWARD TEST"
+    
+    print "TESTING ENCODE BACKWARD"
+    encode('..\Resources\\flower.png', '..\Resources\Macbeth.txt',[2,2,3],False).save('..\Resources\\asdf1.png')
+    m = hashlib.md5()
+    m.update(''.join(open('..\Resources\\asdf1.png','rb').readlines()))
+    assert(m.digest() == 'K\x7f\xe2\x90\xa5\xee\x8a\x00\xa6\xb5z\xe0\xf9}\xe0\x84')
+    print "PASSED ENCODE BACKWARD TEST"
+    
+    print "TESTING DECODE BACKWARD"
+    save_file(decode('..\Resources\\asdf1.png',[2,2,3],False),'..\Resources\\asdf1.txt')
+    m = hashlib.md5()
+    m.update(''.join((open('..\Resources\\asdf1.txt','r').readlines())))
+    decoded = m.digest()
+    m = hashlib.md5()
+    m.update(''.join((open('..\Resources\Macbeth.txt','r').readlines())))
+    from_text = m.digest()
+    assert(decoded == from_text)
+    print "PASSED DECODE BACKWARD TEST"
+
 
