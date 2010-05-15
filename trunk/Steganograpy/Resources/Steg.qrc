@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="Steg">
+    <file>stegosaurus-icon.png</file>
+    <file>picture.png</file>
+    <file>folder_explore.png</file>
+    <file>accept.png</file>
+  </qresource>
+</RCC>

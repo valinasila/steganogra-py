@@ -108,7 +108,6 @@ def encode(im_file, en_file, color_bits=[1,1,1], forward=True):
     
     # If there wasn't enough pixels to encode all the data.
     if i != len(data):
-        print i, len(data)
         raise FileTooLargeException("Image to small for current settings.")
 
     return out_image
