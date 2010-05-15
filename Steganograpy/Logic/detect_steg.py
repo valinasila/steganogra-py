@@ -7,10 +7,10 @@ import re
 import math
 
 from PIL import Image, ImageOps
-from Logic import Steganography as Steg
+from Logic import steganography as Steg
 from scipy import stats
 
-TWL = open('TWL06.txt')
+TWL = open('../Logic/TWL06.txt')
 TWL_words = TWL.read().split()
 
 def dictionary_steg_detect(image):
@@ -69,5 +69,5 @@ def noise_steg_detect(image):
     equal_image.show()
                     
 if __name__ == "__main__":
-    print noise_steg_detect("C:\Documents And Settings\Zachary Varberg\Projects"+
+    print dictionary_steg_detect("C:\Documents And Settings\Zachary Varberg\Projects"+
                            "\Python\Steganogra-py\Steganograpy\Resources\\asdf1.png")

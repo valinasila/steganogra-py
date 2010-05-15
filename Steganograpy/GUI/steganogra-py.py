@@ -40,6 +40,7 @@ from GUI import MainWindow
 from Logic import stegthreads
 from Logic import steganography
 from GUI import progress_dialog
+from Logic import detect_steg
 
 class MyGUI(MainWindow.Ui_MainWindow):
     """
@@ -72,8 +73,8 @@ class MyGUI(MainWindow.Ui_MainWindow):
         self.prog_dialog = progress_dialog.ProgressDialog(self.mw)
         self.progress_thread = stegthreads.ProgressWorker(self.prog_dialog)
          
-        
-        
+        self.auto_detect = False        
+
         # Encode events 
         QObject.connect(self.encode_file_browse_button, SIGNAL("clicked()"),
                         self.on_encode_file_browse_button_press)
@@ -122,6 +123,8 @@ class MyGUI(MainWindow.Ui_MainWindow):
                         self.on_decode_button_press)
         QObject.connect(self.decode_thread, SIGNAL("terminated()"), self.unknown_error)
         QObject.connect(self.decode_thread, SIGNAL("complete()"), self.decode_success)
+        QObject.connect(self.auto_detect_checkbox, SIGNAL("clicked()"),
+                        self.auto_detect_toggled)
         
         
     # Encode event handlers
@@ -162,7 +165,7 @@ class MyGUI(MainWindow.Ui_MainWindow):
         if (self.encode_image_filename != "" and 
             self.encode_new_image_filename != "" and
             self.encode_txt_filename != ""):
-            #self.run_progress()
+            self.run_progress()
 
             bits = [self.encode_red_bits, self.encode_green_bits, self.encode_blue_bits]
             self.encode_thread.setup(self.encode_image_filename, self.encode_txt_filename, 
@@ -184,6 +187,7 @@ class MyGUI(MainWindow.Ui_MainWindow):
         tmp = QErrorMessage(self.mw)
         tmp.showMessage("The image is not large enough to contain the specified file" +
                             " with the current settings")
+        self.progress_complete()
             
     def run_progress(self):
         self.prog_dialog.show()
@@ -223,10 +227,24 @@ class MyGUI(MainWindow.Ui_MainWindow):
         
     def on_decode_button_press(self):
         if(self.decode_image_filename != "" and self.decode_txt_filename != ""):
-            self.decode_thread.setup(self.decode_image_filename, self.decode_txt_filename,
-                                      [self.decode_red_bits, self.decode_green_bits,
-                                      self.decode_blue_bits])
-#            self.run_progress()
+            if not self.auto_detect:
+                self.decode_thread.setup(self.decode_image_filename, self.decode_txt_filename,
+                                         [self.decode_red_bits, self.decode_green_bits,
+                                          self.decode_blue_bits])
+                self.run_progress()
+            else:
+                prob_encoding = detect_steg.dictionary_steg_detect(self.decode_image_filename)
+                if len(prob_encoding['forward']) >= 1:
+                    self.decode_thread.setup(self.decode_image_filename, self.decode_txt_filename,
+                                             prob_encoding['forward'][0])
+                    self.run_progress()
+                elif len(prob_encoding['backward']) >= 1:
+                    self.decode_thread.setup(self.decode_image_filename, self.decode_txt_filename,
+                                             prob_encoding['backward'][0])
+                    self.run_progress()
+                else:
+                    tmp = QErrorMessage(self.mw)
+                    tmp.showMessage("No encoding detected, cannot decode.")
         else:
             tmp = QErrorMessage(self.mw)
             tmp.showMessage("Please specify all filenames.")
@@ -240,7 +258,19 @@ class MyGUI(MainWindow.Ui_MainWindow):
     def unknown_error(self):
         tmp = QErrorMessage(self.mw)
         tmp.showMessage("An unknown error has occurred")
-
+        self.progress_complete()
+        
+    def auto_detect_toggled(self):
+        if self.auto_detect_checkbox.checkState():
+            self.decode_blue_bits_combo.setEnabled(False)
+            self.decode_red_bits_combo.setEnabled(False)
+            self.decode_green_bits_combo.setEnabled(False)
+            self.auto_detect = True
+        else:
+            self.decode_blue_bits_combo.setEnabled(True)
+            self.decode_red_bits_combo.setEnabled(True)
+            self.decode_green_bits_combo.setEnabled(True)
+            self.auto_detect = False 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
