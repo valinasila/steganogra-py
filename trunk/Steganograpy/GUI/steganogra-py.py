@@ -1,6 +1,6 @@
 '''
 Copyright (C) 2010 Zachary Varberg
-@author: Zachary Varberg
+@author: Zachary Varberg 
 
 This file is part of Steganogra-py.
 
