@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Steganogra-py.  If not, see <http://www.gnu.org/licenses/>.
 '''
 from PIL import Image
+import math
 
 class FileTooLargeException(Exception):
     '''
@@ -47,7 +48,9 @@ def encode(im_file, en_file, color_bits=[1,1,1], forward=True):
     encode the data into.  The data comes from en_file.  Currently
     only character data is supported.  The bits list is how many bits 
     of each color to encode the data into.  In the form 
-    [red_bits, green_bits, blue_bits]
+    [red_bits, green_bits, blue_bits].  Forward determines whether for multiple
+    bits for a color it goes from -3, to -2, to -1 (True) or goes from
+    position -1, to -2, to -3 (False)
     '''
     in_image = Image.open(im_file,'r')
     data_file = open(en_file,'rb')
@@ -170,13 +173,33 @@ def save_file(data, file_name):
     out_file.close()
     
 def check_size (bit_num, image, bits_per_pix):
+    '''
+    This checks the size of the image (image) with the number of bits to encode
+    (bit_num) to make sure it will all fit given the current encoding policy 
+    (bits_per_pix)
+    '''
     max_bits = reduce(lambda x,y: x*y, image.size)*bits_per_pix
     if max_bits < bit_num:
         raise FileTooLargeException("Image to small for current settings.")
 
+def get_recommended_encoding(en_filename, image_filename):
+    '''
+    This will return a list that is the recommended encoding policy for the 
+    given file to encode (en_filename) and image (image_filename)
+    '''
+    in_image = Image.open(image_filename,'r')
+    data_file = open(en_filename,'rb')
+    data_bits = float(len(''.join(data_file.readlines()))*8)+16.0 #+16 for appended termination characters
+    num_pix = float(reduce(lambda x,y: x*y,in_image.size))
+    bits_per_pix = math.ceil(data_bits/num_pix)
+    bits_config = []
+    for i in xrange(3,0,-1):
+        bits_config.append(int(math.floor(bits_per_pix/float(i))))
+        bits_per_pix = bits_per_pix - bits_config[-1]
+    return bits_config
     
-
 if __name__ == '__main__':
+    get_recommended_encoding('..\Resources\Macbeth.txt','..\Resources\\lena.png')
     print "TESING ENCODE FORWARD"
     encode('..\Resources\\flower.png', '..\Resources\Macbeth.txt',[2,2,3]).save('..\Resources\\asdf1.png')
     import hashlib
@@ -213,5 +236,3 @@ if __name__ == '__main__':
     from_text = m.digest()
     assert(decoded == from_text)
     print "PASSED DECODE BACKWARD TEST"
-
-
