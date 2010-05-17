@@ -58,6 +58,8 @@ def encode(im_file, en_file, color_bits=[1,1,1], forward=True):
     # Termination characters
     data+= "".join(dec_2_bin(255)) + "".join(dec_2_bin(255))
     
+    check_size(len(data), in_image, sum(color_bits))
+    
     curCol = i = 0;
     out_image = in_image.copy()
     x = y = -1
@@ -166,6 +168,13 @@ def save_file(data, file_name):
     out_file = open(file_name,'wb+')
     out_file.write(data)
     out_file.close()
+    
+def check_size (bit_num, image, bits_per_pix):
+    max_bits = reduce(lambda x,y: x*y, image.size)*bits_per_pix
+    if max_bits < bit_num:
+        raise FileTooLargeException("Image to small for current settings.")
+
+    
 
 if __name__ == '__main__':
     print "TESING ENCODE FORWARD"
