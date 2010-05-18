@@ -1,6 +1,6 @@
 '''
 Copyright (C) 2010 Zachary Varberg
-@author: Zachary Varberg 
+@author: Zachary Varberg
 
 This file is part of Steganogra-py.
 
@@ -73,7 +73,10 @@ class MyGUI(MainWindow.Ui_MainWindow):
         self.prog_dialog = progress_dialog.ProgressDialog(self.mw)
         self.progress_thread = stegthreads.ProgressWorker(self.prog_dialog)
          
-        self.auto_detect = False        
+        self.auto_detect = False    
+        self.auto_encode = False    
+        
+        self.auto_bits_set = False
 
         # Encode events 
         QObject.connect(self.encode_file_browse_button, SIGNAL("clicked()"),
@@ -97,6 +100,8 @@ class MyGUI(MainWindow.Ui_MainWindow):
 #        QObject.connect(self.encode_button, SIGNAL("clicked()"),
 #                        self.on_encode_button_press)
         self.encode_button.clicked.connect(self.on_encode_button_press)
+        QObject.connect(self.auto_encode_checkbox, SIGNAL("clicked()"),
+                        self.auto_encode_toggled)
 
         QObject.connect(self.encode_thread, SIGNAL("terminated()"), self.unknown_error)
         QObject.connect(self.encode_thread, SIGNAL("complete()"), self.encode_success)
@@ -166,7 +171,12 @@ class MyGUI(MainWindow.Ui_MainWindow):
             self.encode_new_image_filename != "" and
             self.encode_txt_filename != ""):
             self.run_progress()
-
+            if not self.auto_bits_set:
+                bits = steganography.get_recommended_encoding(self.encode_txt_filename, self.encode_image_filename)
+                self.encode_red_bits_combo.setCurrentIndex((bits[0]-1)%8)
+                self.encode_green_bits_combo.setCurrentIndex((bits[1]-1)%8)
+                self.encode_blue_bits_combo.setCurrentIndex((bits[2]-1)%8)
+                self.auto_bits_set = True
             bits = [self.encode_red_bits, self.encode_green_bits, self.encode_blue_bits]
             self.encode_thread.setup(self.encode_image_filename, self.encode_txt_filename, 
                                      self.encode_new_image_filename, [self.encode_red_bits, 
@@ -198,6 +208,25 @@ class MyGUI(MainWindow.Ui_MainWindow):
         self.progress_thread.__del__()
         self.prog_dialog.hide()
         self.progress_thread = stegthreads.ProgressWorker(self.prog_dialog)
+        
+    def auto_encode_toggled(self):
+        if self.auto_encode_checkbox.checkState():
+            if self.encode_txt_filename != '' and self.encode_image_filename != '':
+                bits = steganography.get_recommended_encoding(self.encode_txt_filename, self.encode_image_filename)
+                self.encode_red_bits_combo.setCurrentIndex((bits[0]-1)%8)
+                self.encode_green_bits_combo.setCurrentIndex((bits[1]-1)%8)
+                self.encode_blue_bits_combo.setCurrentIndex((bits[2]-1)%8)
+                self.auto_bits_set = True
+            self.encode_blue_bits_combo.setEnabled(False)
+            self.encode_red_bits_combo.setEnabled(False)
+            self.encode_green_bits_combo.setEnabled(False)
+            self.auto_encode = True
+        else:
+            self.encode_blue_bits_combo.setEnabled(True)
+            self.encode_red_bits_combo.setEnabled(True)
+            self.encode_green_bits_combo.setEnabled(True)
+            self.auto_encode = False 
+            self.auto_bits_set = False
 
     # Decode event handlers
     def on_decode_file_browse_button_press(self):
