@@ -199,7 +199,7 @@ def get_recommended_encoding(en_filename, image_filename):
     return bits_config
     
 if __name__ == '__main__':
-    get_recommended_encoding('..\Resources\Macbeth.txt','..\Resources\\lena.png')
+    print get_recommended_encoding('..\Resources\Macbeth.txt','..\Resources\\flower.png')
     print "TESING ENCODE FORWARD"
     encode('..\Resources\\flower.png', '..\Resources\Macbeth.txt',[2,2,3]).save('..\Resources\\asdf1.png')
     import hashlib

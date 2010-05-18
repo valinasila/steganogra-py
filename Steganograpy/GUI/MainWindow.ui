@@ -52,228 +52,12 @@
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="encodeTab">
      <attribute name="title">
       <string>Encode</string>
      </attribute>
-     <widget class="QComboBox" name="encode_red_bits_combo">
-      <property name="geometry">
-       <rect>
-        <x>60</x>
-        <y>210</y>
-        <width>69</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <item>
-       <property name="text">
-        <string>1</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>3</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>4</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>5</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>6</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>7</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>8</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>0</string>
-       </property>
-      </item>
-     </widget>
-     <widget class="QComboBox" name="encode_green_bits_combo">
-      <property name="geometry">
-       <rect>
-        <x>240</x>
-        <y>210</y>
-        <width>69</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <item>
-       <property name="text">
-        <string>1</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>3</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>4</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>5</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>6</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>7</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>8</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>0</string>
-       </property>
-      </item>
-     </widget>
-     <widget class="QComboBox" name="encode_blue_bits_combo">
-      <property name="geometry">
-       <rect>
-        <x>420</x>
-        <y>210</y>
-        <width>69</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <item>
-       <property name="text">
-        <string>1</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>3</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>4</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>5</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>6</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>7</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>8</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>0</string>
-       </property>
-      </item>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>170</y>
-        <width>121</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Number of red bits 
-to encode</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>210</x>
-        <y>170</y>
-        <width>121</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Number of green bits 
-to encode</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>170</y>
-        <width>121</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Number of blue bits 
-to encode</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="encode_file_text">
       <property name="geometry">
        <rect>
@@ -297,7 +81,7 @@ to encode</string>
        <string>Browse</string>
       </property>
       <property name="icon">
-       <iconset resource="../Resources//Steg.qrc">
+       <iconset resource="../Resources/Steg.qrc">
         <normaloff>:/Steg/folder_explore.png</normaloff>:/Steg/folder_explore.png</iconset>
       </property>
       <property name="iconSize">
@@ -320,7 +104,7 @@ to encode</string>
        <string>Browse</string>
       </property>
       <property name="icon">
-       <iconset resource="../Resources//Steg.qrc">
+       <iconset resource="../Resources/Steg.qrc">
         <normaloff>:/Steg/folder_explore.png</normaloff>:/Steg/folder_explore.png</iconset>
       </property>
       <property name="iconSize">
@@ -353,7 +137,7 @@ to encode</string>
        <string>Encode!</string>
       </property>
       <property name="icon">
-       <iconset resource="../Resources//Steg.qrc">
+       <iconset resource="../Resources/Steg.qrc">
         <normaloff>:/Steg/accept.png</normaloff>:/Steg/accept.png</iconset>
       </property>
       <property name="iconSize">
@@ -436,7 +220,7 @@ to encode</string>
       <property name="geometry">
        <rect>
         <x>170</x>
-        <y>140</y>
+        <y>130</y>
         <width>151</width>
         <height>21</height>
        </rect>
@@ -446,7 +230,7 @@ to encode</string>
       <property name="geometry">
        <rect>
         <x>320</x>
-        <y>140</y>
+        <y>130</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -469,7 +253,7 @@ to encode</string>
       <property name="geometry">
        <rect>
         <x>170</x>
-        <y>120</y>
+        <y>110</y>
         <width>221</width>
         <height>20</height>
        </rect>
@@ -487,6 +271,355 @@ to encode</string>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>160</y>
+        <width>557</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>75</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="4">
+        <spacer name="horizontalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>75</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QComboBox" name="encode_red_bits_combo">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>0</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>4</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>6</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>7</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>8</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>0</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QComboBox" name="encode_green_bits_combo">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>0</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>4</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>6</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>7</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>8</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>0</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="5">
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <widget class="QComboBox" name="encode_blue_bits_combo">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>0</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>4</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>6</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>7</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>8</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>0</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="6">
+        <spacer name="horizontalSpacer_10">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <spacer name="horizontalSpacer_11">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Number of red bits 
+to encode</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Number of green bits 
+to encode</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Number of blue bits 
+to encode</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>230</y>
+        <width>561</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="auto_encode_checkbox">
+         <property name="text">
+          <string>Auto Encode</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="decodeTab">
