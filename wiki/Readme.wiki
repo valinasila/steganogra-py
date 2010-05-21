@@ -1,6 +1,16 @@
-=README=
+{{{
+ _____ _                                                             
+/  ___| |                                                            
+\ `--.| |_  ___  __ _  __ _ _ __   ___   __ _ _ __ __ _       _ __  _   _  
+ `--. \ __|/ _ \/ _` |/ _` | '_ \ / _ \ / _` | '__/ _` | ___ | '_ \| | | | 
+/\__/ / |_|  __/ (_| | (_| | | | | (_) | (_| | | | (_| ||___|| |_) | |_| | 
+\____/ \__|\___|\__, |\__,_|_| |_|\___/ \__, |_|  \__,_|     | .__/ \__, | 
+                 __/ |                   __/ |               | |     __/ | 
+                |___/                   |___/                |_|    |___/  
+}}}
 
-This is a readme for Steganogra-py a free steganography tool written inpython and created by Zachary Varberg, 2010.
+
+Steganogra-py (pronounced ste-ga-naw-gra-pie) is a simple steganography app written in python.  It concentrates on providing a simple yet useful interface, and attempts to follow the same principles in the code.  I opted to go with a straigt-forward and easy to read encoding and decoding methods as opposed to one that is optomized beyond recongnition.  It uses a simple algorithm utilizing python's simple array operations.  It also uses the Python Imaging Library (PIL) to open and edit images.
 
 ==EXECUTION==
 
