@@ -1,0 +1,1 @@
+This is a project that started as an assignment for a class at school.  It is a simple steganography application written in python.
